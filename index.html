@@ -11,35 +11,41 @@
     <title></title>
   </head>
 
-  <div class="ui raised segment">
-    <p class="ui center aligned huge header">
-      愚蠢的人类啊
-    </p>
+  <body>
 
-    <br/>
+    <div class="ui container">
 
-    选择一个数字，根据提示点击按钮，信不信我保证能猜到你选的是什么？
-  </div>
 
-  <div class="ui top warning icon attached message">
-    <i class="attention icon"></i>
-    <div class="content" id="message">
-      点击包含着你选择了的数字的集合吧！乱选而导致结果不准确的话不要说我猜得不对。
+      <div class="ui raised segment">
+        <p class="ui center aligned huge header">
+          愚蠢的人类啊
+        </p>
+
+        <br/>
+
+        选择一个数字，根据提示点击按钮，信不信我保证能猜到你选的是什么？
+      </div>
+
+      <div class="ui top warning icon attached message">
+        <i class="attention icon"></i>
+        <div class="content" id="message">
+          点击包含着你选择了的数字的集合吧！乱选而导致结果不准确的话不要说我猜得不对。
+        </div>
+      </div>
+
+      <table class="ui attached inverted celled table">
+        <tbody id="stacks">
+        </tbody>
+      </table>
+      <div class="ui bottom attached primary animated fade button" onclick="reset()">
+        <div class="visible content">
+          砍掉重练！
+        </div>
+        <div class="hidden content">
+          “胜败乃兵家常事，请大侠重新来过”
+        </div>
+      </div>
     </div>
-  </div>
-
-  <table class="ui attached inverted celled table">
-    <tbody id="stacks">
-    </tbody>
-  </table>
-  <div class="ui bottom attached primary animated fade button" onclick="reset()">
-    <div class="visible content">
-      砍掉重练！
-    </div>
-    <div class="hidden content">
-      “胜败乃兵家常事，请大侠重新来过”
-    </div>
-  </div>
   </body>
 </html>
 
