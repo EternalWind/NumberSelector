@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+  <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+  <script src="semantic/dist/semantic.min.js"></script>
+  <script src="jquery-3.1.1.min.js"></script>
+
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+
+  <div class="ui raised segment">
+    <p class="ui center aligned huge header">
+      愚蠢的人类啊
+    </p>
+
+    <br/>
+
+    选择一个数字，根据提示点击按钮，信不信我保证能猜到你选的是什么？
+  </div>
+
+  <div class="ui top warning icon attached message">
+    <i class="attention icon"></i>
+    <div class="content" id="message">
+      点击包含着你选择了的数字的集合吧！乱选而导致结果不准确的话不要说我猜得不对。
+    </div>
+  </div>
+
+  <table class="ui attached inverted celled table">
+    <tbody id="stacks">
+    </tbody>
+  </table>
+  <div class="ui bottom attached primary animated fade button" onclick="reset()">
+    <div class="visible content">
+      砍掉重练！
+    </div>
+    <div class="hidden content">
+      “胜败乃兵家常事，请大侠重新来过”
+    </div>
+  </div>
+  </body>
+</html>
+
+<script>
+  cardStacks = new Array(2);
+  for (i = 0; i < 2; ++i) {
+    cardStacks[i] = new Array(3);
+    for (j = 0; j < 3; ++j) {
+      cardStacks[i][j] = new Array(7);
+    }
+  }
+
+  finalSelectedStackIndex = -1;
+
+  round = 0;
+
+  function reset() {
+    num = 0;
+    currentCopyIndex = 0;
+
+    for (i = 0; i < 3; ++i) {
+      for (j = 0; j < 7; ++j) {
+        cardStacks[currentCopyIndex][i][j] = num++;
+      }
+    }
+
+    finalSelectedStackIndex = -1;
+
+    round = 0;
+
+    $("#message").html("点击包含着你选择了的数字的集合吧！乱选而导致结果不准确的话不要说我猜得不对。");
+    $("#stacks button").removeAttr("disabled", "disabled");
+
+    printCardStacks(cardStacks, currentCopyIndex);
+  }
+
+  function selectStack(selectedIndex) {
+    if (round == 2) {
+      $("#message").html("让我猜猜。。。你选的数字是"
+                         + cardStacks[currentCopyIndex][selectedIndex][0] + "对吧？呵呵。。。");
+
+      $("#stacks button").attr("disabled", "disabled");
+    } else {
+      nextCopyIndex = (currentCopyIndex + 1) % cardStacks.length;
+      rearrangeCardStacks(cardStacks, currentCopyIndex, nextCopyIndex, selectedIndex);
+      currentCopyIndex = nextCopyIndex;
+
+      round++;
+
+      printCardStacks(cardStacks, currentCopyIndex);
+    }
+  }
+
+  function printCardStacks(cardStacks, copyIndex) {
+    output = "";
+
+    for (i = 0; i < cardStacks[0].length; ++i) {
+      output += "<tr><td><button onclick=\"selectStack("
+      + i + ")\" class=\"ui animated button\"><div class=\"visible content\">集合 "
+      + (i + 1) + "</div><div class=\"hidden content\"><i class=\"right arrow icon\"></i></div></button></td><td>";
+
+      for (j = 0; j < cardStacks[0][0].length; ++j) {
+        output += cardStacks[copyIndex][i][j] + "&nbsp&nbsp&nbsp";
+      }
+
+      output += "</td></tr>";
+    }
+
+    $("#stacks").html(output);
+  }
+
+  function rearrangeCardStacks(cardStacks, currentCopyIndex, nextCopyIndex, selectedStack) {
+    assigningStackIndex = 0;
+    assigningStackSlotIndex = 0;
+
+    for (i = 0; i < cardStacks[0][0].length; ++i) {
+      cardStacks[nextCopyIndex][assigningStackIndex][assigningStackSlotIndex] =
+        cardStacks[currentCopyIndex][selectedStack][i];
+
+      assigningStackIndex++;
+      if (assigningStackIndex >= cardStacks[0].length) {
+        assigningStackSlotIndex++;
+        assigningStackIndex = 0;
+      }
+    }
+
+    for (stackIndex = 0; stackIndex < cardStacks[0].length; ++stackIndex) {
+      if (stackIndex != selectedStack) {
+        for (i = 0; i < cardStacks[0][0].length; ++i) {
+          cardStacks[nextCopyIndex][assigningStackIndex][assigningStackSlotIndex] =
+            cardStacks[currentCopyIndex][stackIndex][i];
+
+          assigningStackIndex++;
+          if (assigningStackIndex >= cardStacks[0].length) {
+            assigningStackSlotIndex++;
+            assigningStackIndex = 0;
+          }
+        }
+      }
+    }
+  }
+
+
+
+  $(document).ready(function() {
+    reset();
+  });
+</script>
